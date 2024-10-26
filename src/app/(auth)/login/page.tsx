@@ -11,22 +11,6 @@ export default function Login() {
           Login
         </h2>
         <form>
-          <input
-            type="email"
-            placeholder="Email"
-            className="mb-4 w-full rounded-full border p-3 text-gray-700 focus:outline-none"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="mb-4 w-full rounded-full border p-3 text-gray-700 focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="mb-4 w-full rounded-full bg-lime-500 p-3 text-lg font-bold text-white transition-all duration-300 hover:bg-lime-400"
-          >
-            Login
-          </button>
           <button
             type="button"
             onClick={async () => await signInWithGoogle()}
