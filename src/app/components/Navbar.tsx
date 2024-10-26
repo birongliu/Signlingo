@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
 import LoginButton from "./LoginOut";
-import { createClient } from "../utils/supabase/server";
 import NavItems from "./Navitems";
 
 export const NavBar = () => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   return (
     <nav className="fixed top-0 z-50 flex h-16 w-full items-center bg-lime-300 px-4 font-sans">
       <div className="flex w-full items-center justify-between">
