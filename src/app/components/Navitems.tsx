@@ -16,7 +16,7 @@ const NavItems = () => {
       setUser(user);
     };
     fetchUser();
-  }, []);
+  }, [user]);
   if (user) {
     return (
       <div className="flex gap-2">
