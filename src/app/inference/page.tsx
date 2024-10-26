@@ -8,59 +8,93 @@ import {
   lerp,
 } from "@mediapipe/drawing_utils";
 
+const PREDICTION_INTERVAL = 500;
+const API_URL = "http://localhost:8081/predict";
+
 const HandsContainer = () => {
   const [inputVideoReady, setInputVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [prediction, setPrediction] = useState<{
+    predicted_letter: string;
+    confidence: number;
+  } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const inputVideoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const cropCanvasRef = useRef<HTMLCanvasElement>(null);
+  const lastPredictionTime = useRef(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const predictionQueueRef = useRef<string[]>([]);
+  const predictionRef = useRef(null);
 
   useEffect(() => {
-    if (!inputVideoReady) {
-      return;
-    }
+    if (!inputVideoReady) return;
 
-    if (inputVideoRef.current && canvasRef.current) {
-      console.log("rendering");
+    const setupVideo = async () => {
+      if (!inputVideoRef.current || !canvasRef.current) return;
+
       contextRef.current = canvasRef.current.getContext("2d");
       const constraints = {
-        video: { width: { min: 1280 }, height: { min: 720 } },
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          frameRate: { ideal: 30 },
+        },
       };
 
-      navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         if (inputVideoRef.current) {
           inputVideoRef.current.srcObject = stream;
         }
         sendToMediaPipe();
-      });
+      } catch (err) {
+        console.error("Error accessing webcam:", err);
+        setError("Failed to access webcam");
+      }
+    };
 
-      const hands = new Hands({
-        locateFile: (file) =>
-          `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
-      });
+    const hands = new Hands({
+      locateFile: (file) =>
+        `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`,
+    });
 
-      hands.setOptions({
-        maxNumHands: 2,
-        modelComplexity: 1,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
+    hands.setOptions({
+      maxNumHands: 1,
+      modelComplexity: 1,
+      minDetectionConfidence: 0.7,
+      minTrackingConfidence: 0.7,
+    });
 
-      hands.onResults(onResults);
+    hands.onResults(onResults);
 
-      const sendToMediaPipe = async () => {
-        if (inputVideoRef.current) {
-          if (!inputVideoRef.current.videoWidth) {
-            console.log(inputVideoRef.current.videoWidth);
-            requestAnimationFrame(sendToMediaPipe);
-          } else {
-            await hands.send({ image: inputVideoRef.current });
-            requestAnimationFrame(sendToMediaPipe);
-          }
-        }
-      };
-    }
+    const sendToMediaPipe = async () => {
+      if (!inputVideoRef.current) return;
+
+      if (!inputVideoRef.current.videoWidth) {
+        requestAnimationFrame(sendToMediaPipe);
+        return;
+      }
+
+      try {
+        await hands.send({ image: inputVideoRef.current });
+        requestAnimationFrame(sendToMediaPipe);
+      } catch (err) {
+        console.error("MediaPipe error:", err);
+        requestAnimationFrame(sendToMediaPipe);
+      }
+    };
+
+    setupVideo();
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
   }, [inputVideoReady]);
 
   const getBoundingBox = (landmarks: any[]) => {
@@ -69,7 +103,7 @@ const HandsContainer = () => {
     let maxX = -Infinity;
     let maxY = -Infinity;
 
-    const paddingPercent = 0.2;
+    const paddingPercent = 0.1;
 
     landmarks.forEach((landmark) => {
       minX = Math.min(minX, landmark.x);
@@ -80,86 +114,172 @@ const HandsContainer = () => {
 
     const width = maxX - minX;
     const height = maxY - minY;
-    minX -= width * paddingPercent;
-    maxX += width * paddingPercent;
-    minY -= height * paddingPercent;
-    maxY += height * paddingPercent;
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
 
-    const pixelCoords = {
+    // Make the box square
+    const size = Math.max(width, height) * (1 + paddingPercent * 2);
+    minX = centerX - size / 2;
+    maxX = centerX + size / 2;
+    minY = centerY - size / 2;
+    maxY = centerY + size / 2;
+
+    return {
       x: Math.max(0, Math.floor(minX * canvasRef.current!.width)),
       y: Math.max(0, Math.floor(minY * canvasRef.current!.height)),
       width: Math.min(
-        canvasRef.current!.width - Math.floor(minX * canvasRef.current!.width),
-        Math.floor((maxX - minX) * canvasRef.current!.width),
+        canvasRef.current!.width,
+        Math.floor(size * canvasRef.current!.width),
       ),
       height: Math.min(
-        canvasRef.current!.height -
-          Math.floor(minY * canvasRef.current!.height),
-        Math.floor((maxY - minY) * canvasRef.current!.height),
+        canvasRef.current!.height,
+        Math.floor(size * canvasRef.current!.height),
       ),
     };
-
-    return pixelCoords;
   };
 
-  const onResults = (results: Results) => {
-    if (canvasRef.current && contextRef.current) {
-      setLoaded(true);
-      contextRef.current.save();
-      contextRef.current.clearRect(
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height,
-      );
-      contextRef.current.drawImage(
-        results.image,
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height,
-      );
+  const processNextInQueue = async () => {
+    if (isProcessing || predictionQueueRef.current.length === 0) {
+      return;
+    }
 
-      if (results.multiHandLandmarks && results.multiHandedness) {
-        for (
-          let index = 0;
-          index < results.multiHandLandmarks.length;
-          index++
-        ) {
-          const classification = results.multiHandedness[index];
-          const isRightHand = classification.label === "Right";
-          const landmarks = results.multiHandLandmarks[index];
+    setIsProcessing(true);
+    const imageData = predictionQueueRef.current.shift();
 
-          drawConnectors(contextRef.current, landmarks, HAND_CONNECTIONS, {
-            color: isRightHand ? "#00FF00" : "#FF0000",
-          });
-          drawLandmarks(contextRef.current, landmarks, {
-            color: isRightHand ? "#00FF00" : "#FF0000",
-            fillColor: isRightHand ? "#FF0000" : "#00FF00",
-            radius: (data: Data) => {
-              return lerp(data.from!.z!, -0.15, 0.1, 10, 1);
-            },
-          });
+    if (!imageData) {
+      setIsProcessing(false);
+      return;
+    }
 
-          const bbox = getBoundingBox(landmarks);
-          contextRef.current.strokeStyle = "#00FF00";
-          contextRef.current.lineWidth = 2;
-          contextRef.current.strokeRect(
-            bbox.x,
-            bbox.y,
-            bbox.width,
-            bbox.height,
-          );
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ image: imageData }),
+      });
 
-          //   cropAndSendImage(bbox);
-        }
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+
+      const result = await response.json();
+      if (result.error) throw new Error(result.error);
+      console.log(result);
+      predictionRef.current = result;
+      setPrediction(result);
+      setError(null);
+    } catch (err: any) {
+      if (err.name !== "AbortError") {
+        console.error("Error sending to ASL model:", err);
+        setError(err.message);
+        setPrediction(null);
       }
-      contextRef.current.restore();
+    } finally {
+      setIsProcessing(false);
+      if (predictionQueueRef.current.length > 0) {
+        processNextInQueue();
+      }
     }
   };
 
+  const cropAndQueueImage = (bbox: any) => {
+    if (!cropCanvasRef.current || !contextRef.current) return;
+
+    const currentTime = Date.now();
+    if (currentTime - lastPredictionTime.current < PREDICTION_INTERVAL) return;
+
+    lastPredictionTime.current = currentTime;
+
+    const cropCanvas = cropCanvasRef.current;
+    const cropContext = cropCanvas.getContext("2d");
+
+    if (!cropContext) return;
+
+    cropCanvas.width = 64;
+    cropCanvas.height = 64;
+
+    try {
+      cropContext.drawImage(
+        canvasRef.current!,
+        bbox.x,
+        bbox.y,
+        bbox.width,
+        bbox.height,
+        0,
+        0,
+        64,
+        64,
+      );
+
+      const croppedImage = cropCanvas.toDataURL("image/jpeg", 0.9);
+
+      predictionQueueRef.current.push(croppedImage);
+      if (!isProcessing) {
+        processNextInQueue();
+      }
+    } catch (err) {
+      console.error("Error cropping image:", err);
+    }
+  };
+
+  const onResults = (results: Results) => {
+    if (!canvasRef.current || !contextRef.current) return;
+
+    setLoaded(true);
+    const ctx = contextRef.current;
+
+    ctx.save();
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    ctx.drawImage(
+      results.image,
+      0,
+      0,
+      canvasRef.current.width,
+      canvasRef.current.height,
+    );
+
+    if (results.multiHandLandmarks?.[0]) {
+      const landmarks = results.multiHandLandmarks[0];
+      const isRightHand = results.multiHandedness?.[0]?.label === "Right";
+
+      drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
+        color: isRightHand ? "#00FF00" : "#FF0000",
+      });
+
+      drawLandmarks(ctx, landmarks, {
+        color: isRightHand ? "#00FF00" : "#FF0000",
+        fillColor: isRightHand ? "#FF0000" : "#00FF00",
+        radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
+      });
+
+      const bbox = getBoundingBox(landmarks);
+
+      ctx.strokeStyle = "#00FF00";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
+
+      if (predictionRef.current) {
+        const currentPrediction = predictionRef.current;
+        console.log("prediction");
+        ctx.font = "bold 48px Arial";
+        ctx.fillStyle = "#00FF00";
+        ctx.textAlign = "center";
+        ctx.fillText(
+          `${currentPrediction.predicted_letter} (${(currentPrediction.confidence * 100).toFixed(0)}%)`,
+          bbox.x + bbox.width / 2,
+          bbox.y - 20,
+        );
+      }
+
+      cropAndQueueImage(bbox);
+    }
+
+    ctx.restore();
+  };
+
   return (
-    <div className="">
+    <div className="hands-container relative">
       <video
         autoPlay
         style={{ display: "none" }}
@@ -168,12 +288,24 @@ const HandsContainer = () => {
           setInputVideoReady(!!el);
         }}
       />
-      <canvas ref={canvasRef} width={1280} height={720} />
+      <canvas
+        ref={canvasRef}
+        width={1280}
+        height={720}
+        className="rounded-lg shadow-lg"
+      />
       <canvas ref={cropCanvasRef} style={{ display: "none" }} />
       {!loaded && (
-        <div className="">
-          <div className="spinner"></div>
-          <div className="">Loading</div>
+        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50">
+          <div className="text-center text-white">
+            <div className="spinner mb-4"></div>
+            <div className="text-xl">Loading...</div>
+          </div>
+        </div>
+      )}
+      {error && (
+        <div className="absolute right-4 top-4 rounded bg-red-500 px-4 py-2 text-white">
+          {error}
         </div>
       )}
     </div>
