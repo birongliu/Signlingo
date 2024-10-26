@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="h-screen">
-        <NavBar isSigned={!!user}/>
+        <NavBar />
         {children}
         </body>
     </html>
