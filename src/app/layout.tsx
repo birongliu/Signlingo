@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { NavBar } from "./components/Navbar";
+import { createClient } from "./utils/supabase/server";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,10 +13,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = createClient().auth.getUser();
   return (
     <html lang="en">
       <body className="h-screen">
-        <NavBar />
+        <NavBar isSigned={!!user}/>
         {children}
         </body>
     </html>

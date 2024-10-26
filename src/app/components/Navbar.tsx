@@ -3,14 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
+import LoginButton from "./LoginOut";
+import { createClient } from "../utils/supabase/server";
+import NavItems from "./Navitems";
 
 export const NavBar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (
     <nav className="fixed top-0 z-50 flex h-16 w-full items-center bg-lime-300 px-4 font-sans">
       <div className="flex w-full items-center justify-between">
@@ -21,18 +18,8 @@ export const NavBar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden space-x-6 lg:flex">
-          <Link
-            href="/login"
-            className="text-lg font-bold text-gray-800 transition-colors duration-300 hover:text-lime-600"
-          >
-            Login
-          </Link>
-          <Link
-            href="/signup"
-            className="text-lg font-bold text-gray-800 transition-colors duration-300 hover:text-lime-600"
-          >
-            Sign Up
-          </Link>
+          <NavItems />
+          <LoginButton />
         </div>
 
         {/* Mobile Hamburger Menu */}

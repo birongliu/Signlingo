@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { signInWithGoogle, signup } from "../lib/auth-action";
+import { signInWithGoogle, signup } from "../../lib/auth-action";
 import { FormEvent, useState } from "react";
 import bcrypt from "bcryptjs";
 export default function Signup() {
@@ -13,12 +13,12 @@ export default function Signup() {
 
   const createFormData = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => {
-      if (e.target.name === "password") {
-        prev.set(e.target.name, bcrypt.hashSync(e.target.value, 10));
-        return prev;
+      if(e.target.name === 'password') {
+        prev.set(e.target.name, bcrypt.hashSync(e.target.value, 10))
+        return prev
       }
-      prev.set(e.target.name, e.target.value);
-      return prev;
+      prev.set(e.target.name, e.target.value)
+      return prev
     });
   };
 
