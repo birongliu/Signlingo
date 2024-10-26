@@ -8,7 +8,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ items }) => {
   return (
-    <aside className="w-64 bg-lime-300 p-6">
+    <aside className="hidden w-64 bg-lime-300 p-6 md:block">
       <nav className="mt-16 space-y-6">
         {items.map((item) => (
           <Link
