@@ -14,7 +14,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
           <Link
             key={item.href}
             href={item.href}
-            className="block text-lg font-bold text-gray-800 transition-colors duration-300 hover:text-lime-600"
+            className="block text-lg font-bold text-gray-800 transition-all duration-300 hover:scale-105 hover:text-lime-600"
           >
             {item.icon} {item.label}
           </Link>
