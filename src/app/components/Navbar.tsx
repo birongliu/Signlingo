@@ -8,7 +8,9 @@ export const NavBar = () => {
     <nav className="fixed top-0 z-50 flex h-16 w-full items-center bg-lime-300 px-4 font-sans">
       <div className="flex w-full items-center justify-between">
         {/* Logo */}
-        <div className="text-2xl font-bold text-gray-800">Signlingo</div>
+        <div className="text-2xl font-bold text-gray-800">
+          <Link href="/">Signlingo</Link>
+        </div>
 
         {/* Navigations */}
         <div className="hidden space-x-6 lg:flex">

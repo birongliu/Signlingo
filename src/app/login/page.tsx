@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { signInWithGoogle } from "../lib/auth-action";
 
 export default function Login() {
   return (
@@ -28,6 +29,7 @@ export default function Login() {
           </button>
           <button
             type="button"
+            onClick={async () => await signInWithGoogle()}
             className="w-full rounded-full border border-gray-300 bg-white p-3 text-lg font-bold text-gray-700 transition-all duration-300 hover:bg-gray-100"
           >
             Sign in with Google
@@ -35,7 +37,7 @@ export default function Login() {
         </form>
         <div className="mt-6 text-center">
           <p className="text-gray-700">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/signup"
               className="font-bold text-lime-600 transition-all duration-300 hover:text-lime-500"
