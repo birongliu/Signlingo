@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { signInWithGoogle } from "../lib/auth-action";
 
 export default function Login() {
   return (
@@ -28,6 +29,7 @@ export default function Login() {
           </button>
           <button
             type="button"
+            onClick={async () => await signInWithGoogle()}
             className="w-full rounded-full border border-gray-300 bg-white p-3 text-lg font-bold text-gray-700 transition-all duration-300 hover:bg-gray-100"
           >
             Sign in with Google
