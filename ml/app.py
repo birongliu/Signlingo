@@ -15,6 +15,7 @@ executor = ThreadPoolExecutor(max_workers=4)
 print("Loading model...")
 model = load_model('model.h5')
 print("Model loaded!")
+print("Server running on port 8081")
 
 INPUT_SHAPE = (64, 64)
 ASL_LABELS = [
@@ -23,6 +24,7 @@ ASL_LABELS = [
     'SPACE', 'DELETE', 'NOTHING'
 ]
 
+
 def preprocess_image(image_bytes):
     img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
     img = img.resize(INPUT_SHAPE)
@@ -30,6 +32,7 @@ def preprocess_image(image_bytes):
     img_array = np.expand_dims(img_array, axis=0)
     img_array /= 255.0
     return img_array
+
 
 async def predict_async(image_array):
     def predict():
@@ -41,9 +44,10 @@ async def predict_async(image_array):
             'predicted_letter': predicted_class,
             'confidence': float(confidence)
         }
-    
+
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(executor, predict)
+
 
 @app.route('/predict', methods=['POST'])
 async def predict():
@@ -57,16 +61,18 @@ async def predict():
         print(f"Error during prediction: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/warmup', methods=['GET'])
 def warmup():
     dummy_input = np.zeros((1, 64, 64, 3))
     model.predict(dummy_input, verbose=0)
     return jsonify({'status': 'warmed up'})
 
+
 if __name__ == '__main__':
     print('Running server...')
     dummy_input = np.zeros((1, 64, 64, 3))
     model.predict(dummy_input, verbose=0)
-    
+
     from waitress import serve
     serve(app, host='0.0.0.0', port=8081, threads=4)
