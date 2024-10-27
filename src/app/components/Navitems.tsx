@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/app/utils/supabase/client";
 import Link from "next/link";
 
@@ -8,18 +7,17 @@ import { signout } from "../lib/auth-action";
 import { Button } from "./ui/button";
 
 const NavItems = () => {
-  const [user, setUser] = useState<any>(null);
-  const router = useRouter();
+  const [user, setUser] = useState<boolean>(false);
   const supabase = createClient();
   useEffect(() => {
     const fetchUser = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      setUser(user);
+      setUser(!!user);
     };
     fetchUser();
-  }, [user]);
+  }, [user, supabase.auth]);
 
   if (user !== null) {
     return (
