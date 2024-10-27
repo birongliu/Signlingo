@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
+import NavItems from "./Navitems";
 
 export const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,20 +22,7 @@ export const NavBar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden space-x-6 lg:flex">
-          <Link
-            href="/login"
-            className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
-            aria-label="Login"
-          >
-            Login
-          </Link>
-          <Link
-            href="/signup"
-            className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
-            aria-label="Sign Up"
-          >
-            Sign Up
-          </Link>
+          <NavItems />
         </div>
 
         {/* Mobile Hamburger Menu */}

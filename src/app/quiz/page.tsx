@@ -16,7 +16,7 @@ export default function QuizPage() {
       <Sidebar items={sidebarItems} />
 
       {/* Main Content */}
-      <main className="flex flex-1 items-center justify-center bg-white p-10">
+      <main className="flex mt-10 flex-1 items-center justify-center bg-white p-10">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
           <LessonCard
             unit={"Quiz 1"}

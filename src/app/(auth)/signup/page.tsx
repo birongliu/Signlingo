@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { signInWithGoogle, signup } from "../../lib/auth-action";
+import { signInWithGoogle, signup } from "@/app/lib/auth-action";
 import { FormEvent, useState } from "react";
 import bcrypt from "bcryptjs";
 export default function Signup() {

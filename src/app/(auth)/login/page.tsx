@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { signInWithGoogle } from "../../lib/auth-action";
+import { signInWithGoogle } from "@/app/lib/auth-action";
 
 export default function Login() {
   return (
