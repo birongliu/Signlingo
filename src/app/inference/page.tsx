@@ -219,6 +219,10 @@ const HandsContainer = ({ setSigned }) => {
       cropContext.restore();
 
       // Use PNG for better quality
+      cropContext.fillStyle = "white"; // If your training data has white background
+      cropContext.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
+
+      // Ensure your image is being rescaled exactly like training
       const croppedImage = cropCanvas.toDataURL("image/png");
 
       // console.log("Cropped Image Data:", croppedImage); // Log for debugging
@@ -253,34 +257,34 @@ const HandsContainer = ({ setSigned }) => {
       const landmarks = results.multiHandLandmarks[0];
       const bbox = getBoundingBox(landmarks);
 
-      drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
-        color: "#FF0000",
-      });
+      //   drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
+      //     color: "#FF0000",
+      //   });
 
-      drawLandmarks(ctx, landmarks, {
-        color: "#FF0000",
-        fillColor: "#00FF00",
-        radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
-      });
+      //   drawLandmarks(ctx, landmarks, {
+      //     color: "#FF0000",
+      //     fillColor: "#00FF00",
+      //     radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
+      //   });
 
-      ctx.strokeStyle = "#00FF00";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
+      //   ctx.strokeStyle = "#00FF00";
+      //   ctx.lineWidth = 2;
+      //   ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
 
-      if (predictionRef.current) {
-        const currentPrediction = predictionRef.current;
-        console.log("Current Prediction:", currentPrediction);
-        ctx.font = "bold 48px Arial";
-        ctx.fillStyle = "#00FF00";
-        ctx.textAlign = "center";
-        ctx.fillText(
-          `${currentPrediction.predicted_letter} (${(
-            currentPrediction.confidence * 100
-          ).toFixed(0)}%)`,
-          bbox.x + bbox.width / 2,
-          bbox.y - 20,
-        );
-      }
+      //   if (predictionRef.current) {
+      //     const currentPrediction = predictionRef.current;
+      //     console.log("Current Prediction:", currentPrediction);
+      //     ctx.font = "bold 48px Arial";
+      //     ctx.fillStyle = "#00FF00";
+      //     ctx.textAlign = "center";
+      //     ctx.fillText(
+      //       `${currentPrediction.predicted_letter} (${(
+      //         currentPrediction.confidence * 100
+      //       ).toFixed(0)}%)`,
+      //       bbox.x + bbox.width / 2,
+      //       bbox.y - 20,
+      //     );
+      //   }
 
       cropAndQueueImage(bbox);
     }
