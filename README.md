@@ -52,6 +52,8 @@ To get a local copy up and running, follow these steps:
    ```
    ```bash
    cd ml
+   python3 -m venv venv (Windows)
+   source venv/bin/activate (Linux/MacOS)
    pip install -r requirements.txt
    ```
 3. **Setup Supabase**
