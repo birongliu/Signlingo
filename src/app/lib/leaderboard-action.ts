@@ -1,5 +1,6 @@
 "use server";
 import { createClient } from "@/app/utils/supabase/server";
+import { log } from "console";
 
 export interface LeaderBoard {
     id: string;
