@@ -2,6 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
+  console.log("Updating session");
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -63,13 +64,14 @@ export async function updateSession(request: NextRequest) {
     "/quiz",
     "/progress",
   ];
+  console.log(request.nextUrl.pathname);
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route),
   );
 
   if (isProtectedRoute && !user) {
-
+    console.log("Redirecting to login");
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set("redirectedFrom", request.nextUrl.pathname);

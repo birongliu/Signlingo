@@ -7,17 +7,18 @@ import { signout } from "../lib/auth-action";
 import { Button } from "./ui/button";
 
 const NavItems = () => {
-  const [user, setUser] = useState<boolean>(false);
+  const [user, setUser] = useState<{ id: string} | null>(null);
   const supabase = createClient();
   useEffect(() => {
     const fetchUser = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      setUser(!!user);
+      setUser(user);
     };
     fetchUser();
-  }, [user, supabase.auth]);
+  }, [user]);
+
 
   if (user !== null) {
     return (
@@ -31,7 +32,7 @@ const NavItems = () => {
         <Button
           onClick={() => {
             signout();
-            setUser(false);
+            setUser(null);
           }}
           className="block text-sm font-medium text-white transition-all duration-300 hover:scale-105"
         >
