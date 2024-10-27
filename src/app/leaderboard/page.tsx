@@ -1,7 +1,9 @@
 "use client";
 
 import Sidebar from "../components/Sidebar"; // Reuse your Sidebar component
-import React from "react";
+import React, { useEffect } from "react";
+import { getleaderboard, LeaderBoard } from "../lib/leaderboard-action";
+import { createClient } from "../utils/supabase/server";
 
 const leaderboardData = [
   { name: "Joe", lessonsCompleted: 1 },
@@ -12,9 +14,12 @@ const leaderboardData = [
 ];
 
 export default function LeaderboardPage() {
-  const sortedLeaderboard = leaderboardData.sort(
-    (a, b) => b.lessonsCompleted - a.lessonsCompleted,
-  );
+  const [leaderboard, setLeaderboard] = React.useState<LeaderBoard[]>([]);
+
+  useEffect(() => {
+    getleaderboard().then(setLeaderboard);
+  }, []);
+
 
   const sidebarItems = [
     { href: "/learn", label: "Learn", icon: "🤓" },
@@ -22,6 +27,7 @@ export default function LeaderboardPage() {
     { href: "/progress", label: "Progress", icon: "📈" },
   ];
 
+  const sortedLeaderboard = leaderboard.sort((a, b) => b.score - a.score);
   return (
     <div className="flex min-h-screen bg-white font-sans">
       {/* Sidebar */}
@@ -42,10 +48,10 @@ export default function LeaderboardPage() {
                 className="bg-mask-green hover:bg-feather-green flex justify-between rounded-lg p-4 shadow-md"
               >
                 <span className="text-xl font-bold text-white">
-                  {index + 1}. {user.name}
+                  {index + 1}. {user.username}
                 </span>
                 <span className="text-xl font-bold text-white">
-                  {user.lessonsCompleted} Lessons Completed
+                  {user.score} Lessons Completed
                 </span>
               </div>
             ))}
