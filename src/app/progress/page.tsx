@@ -35,12 +35,12 @@ export default function ProgressPage() {
       <main className="mt-16 flex-1 p-6">
         {/* User Profile */}
         <section className="mb-8">
-          <div className="mx-auto w-full max-w-md rounded-lg bg-lime-100 p-8 shadow-md">
-            <h1 className="mb-4 text-center text-3xl font-bold text-gray-800">
+          <div className="bg-mask-green mx-auto w-full max-w-md rounded-lg p-8 shadow-md">
+            <h1 className="mb-4 text-center text-3xl font-bold text-white">
               Hello, {userData.name}
             </h1>
             <div className="text-center">
-              <p className="mb-2 text-xl font-semibold text-gray-700">
+              <p className="mb-2 text-xl font-semibold text-white">
                 Good work! You have completed {userData.lessonsCompleted}{" "}
                 lessons or quizzes!
               </p>
@@ -50,16 +50,16 @@ export default function ProgressPage() {
 
         {/* Completed Lessons */}
         <section className="mb-6">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-700">
+          <h2 className="text-eel mb-4 text-2xl font-semibold">
             Completed Lessons
           </h2>
           <div className="flex flex-col gap-3">
             {completedLessons.map((lesson, index) => (
               <div
                 key={index}
-                className="rounded-lg bg-lime-100 p-4 shadow-md hover:bg-lime-200"
+                className="bg-mask-green hover:bg-feather-green rounded-lg p-4 shadow-md"
               >
-                <h3 className="text-xl font-bold text-gray-800">
+                <h3 className="text-xl font-bold text-white">
                   {lesson.unit}: {lesson.title}
                 </h3>
               </div>
@@ -69,16 +69,16 @@ export default function ProgressPage() {
 
         {/* Completed Quizzes */}
         <section>
-          <h2 className="mb-4 text-2xl font-semibold text-gray-700">
+          <h2 className="text-eel mb-4 text-2xl font-semibold">
             Completed Quizzes
           </h2>
           <div className="flex flex-col gap-3">
             {completedQuizzes.map((quiz, index) => (
               <div
                 key={index}
-                className="rounded-lg bg-blue-100 p-4 shadow-md hover:bg-blue-200"
+                className="bg-mask-green hover:bg-feather-green rounded-lg p-4 shadow-md"
               >
-                <h3 className="text-xl font-bold text-gray-800">
+                <h3 className="text-xl font-bold text-white">
                   {quiz.quiz}: {quiz.description}
                 </h3>
               </div>

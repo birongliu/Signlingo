@@ -8,13 +8,13 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ items }) => {
   return (
-    <aside className="hidden w-64 bg-lime-300 p-6 md:block">
+    <aside className="bg-feather-green hidden w-64 p-6 md:block">
       <nav className="mt-16 space-y-6">
         {items.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className="block text-lg font-bold text-gray-800 transition-all duration-300 hover:scale-105 hover:text-lime-600"
+            className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
           >
             {item.icon} {item.label}
           </Link>
