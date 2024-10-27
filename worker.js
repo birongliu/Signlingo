@@ -40,7 +40,6 @@ export default {
 async function runASLInference(base64ImageData) {
   // Decode base64 image data to binary
   const bufferData = Buffer.from(base64ImageData, "base64");
-  s;
 
   // Send the binary data to the Flask server
   const response = await fetch("http://localhost:8000/predict", {

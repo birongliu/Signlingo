@@ -267,9 +267,9 @@ const HandsContainer = ({ setSigned }) => {
       //     radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
       //   });
 
-      //   ctx.strokeStyle = "#00FF00";
-      //   ctx.lineWidth = 2;
-      //   ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
+      ctx.strokeStyle = "#00FF00";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
 
       //   if (predictionRef.current) {
       //     const currentPrediction = predictionRef.current;

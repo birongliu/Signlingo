@@ -41,7 +41,7 @@ export default function LearningPage() {
       setTimeout(() => {
         setNum((e) => e + 1);
         setCurrentSign((e) => e + 1);
-      }, 8000);
+      }, 5000);
     }
     console.log(num);
   };
