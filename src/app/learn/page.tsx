@@ -16,8 +16,17 @@ export default function LearningPage() {
   const [num, setNum] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentSign, setCurrentSign] = useState(0);
-
+  const [signed, setSigned] = useState("Nothing");
   const signs = ["/a.jpg", "/b.jpg", "/c.jpg"];
+
+  useEffect(() => {
+    if (signed.predicted_letter == String.fromCharCode(65 + currentSign)) {
+      setNum((e) => e + 1);
+      setCurrentSign((e) => e + 1);
+    } else {
+      console.log(signed.predicted_letter);
+    }
+  }, [signed]);
 
   const startLesson = () => {
     setModalOpen(true);
@@ -68,7 +77,12 @@ export default function LearningPage() {
           <div className="h-3/4 w-3/4 overflow-hidden rounded-lg bg-white p-4 shadow-lg">
             <div className="flex flex-row items-center justify-center gap-12">
               {num % 2 != 0 && (
-                <button className="rounded-3xl bg-mask-green px-2 py-1 text-lg">
+                <button
+                  onClick={() => {
+                    setNum((e) => e - 1);
+                  }}
+                  className="rounded-3xl bg-mask-green px-2 py-1 text-lg"
+                >
                   Hint
                 </button>
               )}
@@ -121,7 +135,7 @@ export default function LearningPage() {
             ) : (
               <>
                 <div className="relative h-full w-full bg-black">
-                  <HandsContainer />
+                  <HandsContainer setSigned={setSigned} />
                 </div>
               </>
             )}

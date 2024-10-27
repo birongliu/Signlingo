@@ -11,7 +11,7 @@ import {
 const PREDICTION_INTERVAL = 50;
 const API_URL = "http://localhost:8081/predict";
 
-const HandsContainer = () => {
+const HandsContainer = ({ setSigned }) => {
   const [inputVideoReady, setInputVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [prediction, setPrediction] = useState<{
@@ -164,9 +164,9 @@ const HandsContainer = () => {
 
       const result = await response.json();
       if (result.error) throw new Error(result.error);
-      console.log(result);
+      // console.log(result);
       predictionRef.current = result;
-      setPrediction(result);
+      setSigned(result);
       setError(null);
     } catch (err: any) {
       if (err.name !== "AbortError") {
@@ -221,7 +221,7 @@ const HandsContainer = () => {
       // Use PNG for better quality
       const croppedImage = cropCanvas.toDataURL("image/png");
 
-      console.log("Cropped Image Data:", croppedImage); // Log for debugging
+      // console.log("Cropped Image Data:", croppedImage); // Log for debugging
       predictionQueueRef.current.push(croppedImage);
       if (!isProcessing) {
         processNextInQueue();
