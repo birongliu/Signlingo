@@ -1,17 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface LessonCardProps {
   unit: string;
   description: string;
+  onStart: () => void; // Pass function to start lesson
 }
 
-const LessonCard: React.FC<LessonCardProps> = ({ unit, description }) => {
+const LessonCard: React.FC<LessonCardProps> = ({
+  unit,
+  description,
+  onStart,
+}) => {
   return (
-    <div className="rounded-lg bg-lime-100 p-8 shadow-md transition-all duration-300 hover:scale-105">
-      <h1 className="mb-4 text-4xl font-bold text-gray-800">{unit}</h1>
-      <p className="mb-6 text-gray-700">{description}</p>
-      <button className="rounded-full bg-lime-500 px-6 py-3 text-lg font-bold text-white transition-all duration-300 hover:bg-lime-400">
-        Start
+    <div className="bg-feather-green rounded-lg p-8 shadow-md transition-all duration-300 hover:-translate-y-2">
+      <h1 className="mb-4 text-4xl font-bold text-white">{unit}</h1>
+      <p className="mb-6 text-lg font-semibold text-white">{description}</p>
+      {/* Start the lesson when clicked */}
+      <button
+        className="rounded-full border border-gray-400 bg-white px-6 py-3 text-lg font-bold text-black transition-all duration-300 hover:scale-105"
+        onClick={onStart}
+      >
+        Start Lesson
       </button>
     </div>
   );
