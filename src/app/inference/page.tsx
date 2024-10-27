@@ -1,12 +1,17 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Results, Hands, VERSION } from "@mediapipe/hands";
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
+import { Results, Hands, HAND_CONNECTIONS, VERSION } from "@mediapipe/hands";
+import {
+  drawConnectors,
+  drawLandmarks,
+  Data,
+  lerp,
+} from "@mediapipe/drawing_utils";
 
 const PREDICTION_INTERVAL = 50;
 const API_URL = "http://localhost:8081/predict";
 
-const HandsContainer = ({ setSigned }: { setSigned: (prediction: { predicted_letter: string; confidence: number }) => void }) => {
+const HandsContainer = ({ setSigned }) => {
   const [inputVideoReady, setInputVideoReady] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [prediction, setPrediction] = useState<{
@@ -177,7 +182,7 @@ const HandsContainer = ({ setSigned }: { setSigned: (prediction: { predicted_let
     }
   };
 
-  const cropAndQueueImage = (bbox: { x: number; y: number; width: number; height: number }) => {
+  const cropAndQueueImage = (bbox) => {
     if (!cropCanvasRef.current || !contextRef.current) return;
 
     const currentTime = Date.now();
@@ -255,7 +260,7 @@ const HandsContainer = ({ setSigned }: { setSigned: (prediction: { predicted_let
       drawLandmarks(ctx, landmarks, {
         color: "#FF0000",
         fillColor: "#00FF00",
-        radius: (data: Data) => lerp(data.fro-L 2m!.z!, -0.15, 0.1, 10, 1),
+        radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
       });
 
       ctx.strokeStyle = "#00FF00";
@@ -301,9 +306,11 @@ const HandsContainer = ({ setSigned }: { setSigned: (prediction: { predicted_let
           left: 0,
           width: "100%",
           height: "100%",
+          // width: 1280,
+          // height: 720,
         }}
-        // width={1280}
-        // height={720}
+        width={1920}
+        height={1080}
       />
       <canvas ref={cropCanvasRef} style={{ display: "none" }} />
       {/* {error && <div className="error">{error}</div>} */}

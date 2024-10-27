@@ -24,16 +24,8 @@ import { Switch } from "@/app/components/ui/switch";
 
 const notifications = [
   {
-    title: "Your call has been confirmed.",
+    title: "Learn the alphabet!",
     description: "1 hour ago",
-  },
-  {
-    title: "You have a new message!",
-    description: "1 hour ago",
-  },
-  {
-    title: "Your subscription is expiring soon!",
-    description: "2 hours ago",
   },
 ];
 
@@ -62,24 +54,12 @@ const LessonCard: React.FC<LessonCardProps> = ({
     //   </CardContent>
     // </Card>
 
-    <Card className={cn("w-[380px]")}>
+    <Card className={cn("")}>
       <CardHeader>
-        <CardTitle>Notifications</CardTitle>
-        <CardDescription>You have 3 unread messages.</CardDescription>
+        <CardTitle>{unit}</CardTitle>
+        <CardDescription>You have 3 unfinished lessons.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <div className="flex items-center space-x-4 rounded-md border p-4">
-          <BellRing />
-          <div className="flex-1 space-y-1">
-            <p className="text-sm font-medium leading-none">
-              Push Notifications
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Send notifications to device.
-            </p>
-          </div>
-          <Switch />
-        </div>
         <div>
           {notifications.map((notification, index) => (
             <div
@@ -89,10 +69,16 @@ const LessonCard: React.FC<LessonCardProps> = ({
               <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  {notification.title}
+                  {unit == "Unit 2"
+                    ? "Learn common words!"
+                    : unit == "Unit 3"
+                      ? "Learn sentences!"
+                      : notification.title}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {notification.description}
+                  {unit == "Unit 2" || unit == "Unit 3"
+                    ? ""
+                    : notification.description}
                 </p>
               </div>
             </div>
@@ -100,8 +86,8 @@ const LessonCard: React.FC<LessonCardProps> = ({
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={onStart} className="w-full">
-          <Check /> Mark all as read
+        <Button onClick={onStart} className="w-full bg-feather-green">
+          <Check /> Start Lesson
         </Button>
       </CardFooter>
     </Card>
