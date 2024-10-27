@@ -8,7 +8,7 @@ import {
   lerp,
 } from "@mediapipe/drawing_utils";
 
-const PREDICTION_INTERVAL = 1000;
+const PREDICTION_INTERVAL = 50;
 const API_URL = "http://localhost:8081/predict";
 
 const HandsContainer = () => {
@@ -39,8 +39,8 @@ const HandsContainer = () => {
       contextRef.current = canvasRef.current.getContext("2d");
       const constraints = {
         video: {
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
           frameRate: { ideal: 30 },
         },
       };
@@ -117,7 +117,6 @@ const HandsContainer = () => {
     const centerX = (minX + maxX) / 2;
     const centerY = (minY + maxY) / 2;
 
-    // Make the box square
     const size = Math.max(width, height) * (1 + paddingPercent * 2);
     minX = centerX - size / 2;
     maxX = centerX + size / 2;
@@ -183,7 +182,7 @@ const HandsContainer = () => {
     }
   };
 
-  const cropAndQueueImage = (bbox: any) => {
+  const cropAndQueueImage = (bbox) => {
     if (!cropCanvasRef.current || !contextRef.current) return;
 
     const currentTime = Date.now();
@@ -196,8 +195,8 @@ const HandsContainer = () => {
 
     if (!cropContext) return;
 
-    cropCanvas.width = 64;
-    cropCanvas.height = 64;
+    cropCanvas.width = 800;
+    cropCanvas.height = 800;
 
     try {
       cropContext.drawImage(
@@ -208,12 +207,14 @@ const HandsContainer = () => {
         bbox.height,
         0,
         0,
-        64,
-        64,
+        cropCanvas.width,
+        cropCanvas.height, // Ensure it fills the crop canvas
       );
 
-      const croppedImage = cropCanvas.toDataURL("image/jpeg", 0.9);
+      // Switch to PNG for better quality
+      const croppedImage = cropCanvas.toDataURL("image/jpeg");
 
+      console.log("Cropped Image Data:", croppedImage); // Log for debugging
       predictionQueueRef.current.push(croppedImage);
       if (!isProcessing) {
         processNextInQueue();
@@ -231,55 +232,47 @@ const HandsContainer = () => {
 
     ctx.save();
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+    // Mirroring the video by flipping it horizontally
+    ctx.scale(-1, 1);
     ctx.drawImage(
       results.image,
-      0,
+      -canvasRef.current.width, // Move the image to the left by its width
       0,
       canvasRef.current.width,
       canvasRef.current.height,
     );
 
+    ctx.restore(); // Restore the context to avoid affecting other drawings
+
     if (results.multiHandLandmarks?.[0]) {
       const landmarks = results.multiHandLandmarks[0];
-      const isRightHand = results.multiHandedness?.[0]?.label === "Right";
-
-      // drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
-      //   // color: isRightHand ? "#00FF00" : "#FF0000",
-      // });
-
-      // drawLandmarks(ctx, landmarks, {
-      //   color: isRightHand ? "#00FF00" : "#FF0000",
-      //   fillColor: isRightHand ? "#FF0000" : "#00FF00",
-      //   radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
-      // });
-
       const bbox = getBoundingBox(landmarks);
+      const mirroredX = canvasRef.current.width - bbox.x - bbox.width;
 
       ctx.strokeStyle = "#00FF00";
       ctx.lineWidth = 2;
-      ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
+      ctx.strokeRect(mirroredX, bbox.y, bbox.width, bbox.height);
 
       if (predictionRef.current) {
         const currentPrediction = predictionRef.current;
-        console.log("prediction");
+        console.log("Current Prediction:", currentPrediction);
         ctx.font = "bold 48px Arial";
         ctx.fillStyle = "#00FF00";
         ctx.textAlign = "center";
         ctx.fillText(
           `${currentPrediction.predicted_letter} (${(currentPrediction.confidence * 100).toFixed(0)}%)`,
-          bbox.x + bbox.width / 2,
+          mirroredX + bbox.width / 2,
           bbox.y - 20,
         );
       }
 
-      cropAndQueueImage(bbox);
+      cropAndQueueImage({ ...bbox, x: mirroredX }); // Pass the mirrored x-coordinate to the crop function
     }
-
-    ctx.restore();
   };
 
   return (
-    <div className="hands-container relative">
+    <div className="hands-container">
       <video
         autoPlay
         style={{ display: "none" }}
@@ -290,22 +283,16 @@ const HandsContainer = () => {
       />
       <canvas
         ref={canvasRef}
+        style={{ position: "absolute", top: 0, left: 0 }}
         width={1280}
         height={720}
-        className="rounded-lg shadow-lg"
       />
       <canvas ref={cropCanvasRef} style={{ display: "none" }} />
-      {!loaded && (
-        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50">
-          <div className="text-center text-white">
-            <div className="spinner mb-4"></div>
-            <div className="text-xl">Loading...</div>
-          </div>
-        </div>
-      )}
-      {error && (
-        <div className="absolute right-4 top-4 rounded bg-red-500 px-4 py-2 text-white">
-          {error}
+      {error && <div className="error">{error}</div>}
+      {prediction && (
+        <div className="prediction">
+          Predicted Letter: {prediction.predicted_letter} (
+          {(prediction.confidence * 100).toFixed(2)}%)
         </div>
       )}
     </div>
