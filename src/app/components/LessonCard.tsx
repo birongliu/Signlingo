@@ -86,7 +86,7 @@ const LessonCard: React.FC<LessonCardProps> = ({
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={onStart} className="w-full">
+        <Button onClick={onStart} className="w-full bg-feather-green">
           <Check /> Start Lesson
         </Button>
       </CardFooter>
