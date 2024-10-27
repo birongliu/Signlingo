@@ -1,27 +1,7 @@
 "use client";
 import Link from "next/link";
-import { signInWithGoogle, signup } from "@/app/lib/auth-action";
-import { FormEvent, useState } from "react";
-import bcrypt from "bcryptjs";
+import { signInWithGoogle } from "@/app/lib/auth-action";
 export default function Signup() {
-  const [formData, setFormData] = useState(() => new FormData());
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await signup(formData);
-  };
-
-  const createFormData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => {
-      if (e.target.name === "password") {
-        prev.set(e.target.name, bcrypt.hashSync(e.target.value, 10));
-        return prev;
-      }
-      prev.set(e.target.name, e.target.value);
-      return prev;
-    });
-  };
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-white font-sans">
       <div className="bg-mask-green w-full max-w-md rounded-lg p-8 shadow-md">
