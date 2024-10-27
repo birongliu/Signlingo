@@ -72,7 +72,7 @@ const getURL = () => {
   // Make sure to include `https://` when not localhost.
   url = url.startsWith('http') ? url : `https://${url}`
   // Make sure to include a trailing `/`.
-  url = url.endsWith('/') ? `${url}learn` : `${url}/learn`
+  url = url.endsWith('/') ? `${url}` : `${url}/`
   return url
 }
 
@@ -81,7 +81,7 @@ export async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${getURL()}`,
+      redirectTo: `${getURL()}learn`,
       queryParams: {
         access_type: "offline",
         prompt: "consent",
