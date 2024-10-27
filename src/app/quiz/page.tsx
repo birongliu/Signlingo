@@ -18,19 +18,19 @@ export default function QuizPage() {
       question: "What is the sign for 'A'?", // question
       options: ["Option 1: A", "Option 2: B"], // options
       answer: 0, // correct option (index)
-      image: "/a.jpg", // img used
+      image: "/aquiz.png", // img used
     },
     {
       question: "What is the sign for 'B'?",
       options: ["Option 1: B", "Option 2: C"],
       answer: 0,
-      image: "/b.jpg",
+      image: "/bquiz.png",
     },
     {
       question: "What is the sign for 'C'?",
       options: ["Option 1: C", "Option 2: A"],
       answer: 0,
-      image: "/c.jpg",
+      image: "/cquiz.png",
     },
   ];
 
@@ -127,7 +127,7 @@ export default function QuizPage() {
               {questions[currentQuestion].options.map((option, index) => (
                 <div
                   key={index}
-                  className={`hover:bg-mask-green mb-4 cursor-pointer rounded-lg border p-4 text-lg`}
+                  className={`mb-4 cursor-pointer rounded-lg border p-4 text-lg hover:bg-mask-green`}
                   onClick={() => handleOptionClick(index)}
                 >
                   {option}
@@ -162,7 +162,7 @@ export default function QuizPage() {
             <div className="flex justify-center">
               <button
                 onClick={closeResults}
-                className="bg-mask-green hover:bg-feather-green rounded-lg px-6 py-3 text-lg text-white transition-all duration-300"
+                className="rounded-lg bg-mask-green px-6 py-3 text-lg text-white transition-all duration-300 hover:bg-feather-green"
               >
                 Close
               </button>
