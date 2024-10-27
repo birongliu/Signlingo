@@ -7,9 +7,6 @@ from PIL import Image
 from flask_cors import CORS
 import io
 import base64
-import cv2
-from collections import OrderedDict
-import time
 
 app = Flask(__name__)
 CORS(app)
@@ -28,22 +25,21 @@ ASL_LABELS = [
 
 def preprocess_image(image_bytes):
     img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
-    img = img.resize(INPUT_SHAPE) 
-    img_array = np.array(img, dtype=np.float32)  
-    img_array = np.expand_dims(img_array, axis=0)  
-    img_array /= 255.0  
+    img = img.resize(INPUT_SHAPE)
+    img_array = np.array(img, dtype=np.float32)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.0
     return img_array
-
 
 async def predict_async(image_array):
     def predict():
         predictions = model.predict(image_array)
         predicted_class_index = np.argmax(predictions, axis=1)
-        predicted_class = ASL_LABELS[predicted_class_index[0]] 
-        confidence = predictions[0][predicted_class_index[0]]  
+        predicted_class = ASL_LABELS[predicted_class_index[0]]
+        confidence = predictions[0][predicted_class_index[0]]
         return {
             'predicted_letter': predicted_class,
-            'confidence': float(confidence) 
+            'confidence': float(confidence)
         }
     
     loop = asyncio.get_event_loop()
@@ -54,16 +50,9 @@ async def predict():
     try:
         image_data = request.json['image'].split(',')[1]
         image_bytes = base64.b64decode(image_data)
-
-        # img = Image.open(io.BytesIO(image_bytes))
-        # img.show()  
-        # print(f"Image size: {img.size}, Mode: {img.mode}")
-
         image_array = preprocess_image(image_bytes)
-
         result = await predict_async(image_array)
         return jsonify(result)
-    
     except Exception as e:
         print(f"Error during prediction: {str(e)}")
         return jsonify({'error': str(e)}), 500

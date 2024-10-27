@@ -199,20 +199,27 @@ const HandsContainer = () => {
     cropCanvas.height = 800;
 
     try {
+      cropContext.save();
+      // Flip the context horizontally to un-mirror the image
+      cropContext.scale(-1, 1);
+
+      // Adjust the x-coordinate accordingly
       cropContext.drawImage(
         canvasRef.current!,
         bbox.x,
         bbox.y,
         bbox.width,
         bbox.height,
-        0,
+        -cropCanvas.width, // Negative canvas width to flip the image
         0,
         cropCanvas.width,
         cropCanvas.height, // Ensure it fills the crop canvas
       );
 
-      // Switch to PNG for better quality
-      const croppedImage = cropCanvas.toDataURL("image/jpeg");
+      cropContext.restore();
+
+      // Use PNG for better quality
+      const croppedImage = cropCanvas.toDataURL("image/png");
 
       console.log("Cropped Image Data:", croppedImage); // Log for debugging
       predictionQueueRef.current.push(croppedImage);
@@ -233,26 +240,22 @@ const HandsContainer = () => {
     ctx.save();
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-    // Mirroring the video by flipping it horizontally
-    ctx.scale(-1, 1);
+    // Draw the video frame to the canvas
     ctx.drawImage(
       results.image,
-      -canvasRef.current.width, // Move the image to the left by its width
+      0,
       0,
       canvasRef.current.width,
       canvasRef.current.height,
     );
 
-    ctx.restore(); // Restore the context to avoid affecting other drawings
-
     if (results.multiHandLandmarks?.[0]) {
       const landmarks = results.multiHandLandmarks[0];
       const bbox = getBoundingBox(landmarks);
-      const mirroredX = canvasRef.current.width - bbox.x - bbox.width;
 
       ctx.strokeStyle = "#00FF00";
       ctx.lineWidth = 2;
-      ctx.strokeRect(mirroredX, bbox.y, bbox.width, bbox.height);
+      ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
 
       if (predictionRef.current) {
         const currentPrediction = predictionRef.current;
@@ -261,14 +264,18 @@ const HandsContainer = () => {
         ctx.fillStyle = "#00FF00";
         ctx.textAlign = "center";
         ctx.fillText(
-          `${currentPrediction.predicted_letter} (${(currentPrediction.confidence * 100).toFixed(0)}%)`,
-          mirroredX + bbox.width / 2,
+          `${currentPrediction.predicted_letter} (${(
+            currentPrediction.confidence * 100
+          ).toFixed(0)}%)`,
+          bbox.x + bbox.width / 2,
           bbox.y - 20,
         );
       }
 
-      cropAndQueueImage({ ...bbox, x: mirroredX }); // Pass the mirrored x-coordinate to the crop function
+      cropAndQueueImage(bbox);
     }
+
+    ctx.restore();
   };
 
   return (
