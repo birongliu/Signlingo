@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/app/utils/supabase/client";
-import Link from "next/link"; 
+import Link from "next/link";
 
 const NavItems = () => {
   const [user, setUser] = useState<any>(null);
@@ -29,9 +29,7 @@ const NavItems = () => {
       </div>
     );
   }
-  return (
-    <div></div>
-  );
+  return <div></div>;
 };
 
 export default NavItems;
