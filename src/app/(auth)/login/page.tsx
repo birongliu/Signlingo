@@ -6,7 +6,7 @@ import { signInWithGoogle } from "@/app/lib/auth-action";
 export default function Login() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-white font-sans">
-      <div className="bg-mask-green w-full max-w-md rounded-lg p-8 shadow-md">
+      <div className="bg-feather-green w-full max-w-md rounded-lg p-8 shadow-md">
         <h2 className="mb-6 text-center text-3xl font-bold text-white">
           Login
         </h2>
