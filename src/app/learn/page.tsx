@@ -78,7 +78,7 @@ export default function LearningPage() {
                   onClick={() => {
                     setNum((e) => e - 1);
                   }}
-                  className="bg-mask-green rounded-3xl px-2 py-1 text-lg"
+                  className="rounded-3xl bg-mask-green px-2 py-1 text-lg"
                 >
                   Hint
                 </button>
@@ -100,7 +100,7 @@ export default function LearningPage() {
                       setCurrentSign(currentSign + 1);
                     }
                   }}
-                  className="bg-mask-green rounded-3xl px-2 py-1 text-lg"
+                  className="rounded-3xl bg-mask-green px-2 py-1 text-lg"
                 >
                   {signs.length + 1 + (num % 2) == num ? "Finish" : "Skip"}
                 </button>
@@ -122,7 +122,7 @@ export default function LearningPage() {
                     onClick={
                       currentSign === signs.length ? closeLesson : nextSign
                     }
-                    className={`bg-mask-green mr-2 w-full items-center rounded-lg px-6 py-3 text-lg text-white`}
+                    className={`mr-2 w-full items-center rounded-lg bg-mask-green px-6 py-3 text-lg text-white`}
                     // disabled={currentSign === signs.length - 1}
                   >
                     {currentSign === signs.length ? "Close" : "Next"}

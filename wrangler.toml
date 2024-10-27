@@ -1,0 +1,6 @@
+name = "asl-websocket-worker"
+type = "javascript"
+account_id = ""  # Leave this blank for local development
+
+[[migrations]]
+tag = "v1"
