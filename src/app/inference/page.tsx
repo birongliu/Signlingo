@@ -253,6 +253,16 @@ const HandsContainer = () => {
       const landmarks = results.multiHandLandmarks[0];
       const bbox = getBoundingBox(landmarks);
 
+      // drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
+      //   color: "#FF0000",
+      // });
+
+      // drawLandmarks(ctx, landmarks, {
+      //   color: "#FF0000",
+      //   fillColor: "#00FF00",
+      //   radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
+      // });
+
       ctx.strokeStyle = "#00FF00";
       ctx.lineWidth = 2;
       ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
