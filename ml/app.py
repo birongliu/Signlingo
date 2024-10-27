@@ -27,63 +27,41 @@ ASL_LABELS = [
 ]
 
 def preprocess_image(image_bytes):
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = cv2.resize(img, INPUT_SHAPE)
-    img = img.astype(np.float32) / 255.0
-    img = np.expand_dims(img, axis=0)
-    return img
+    img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+    img = img.resize(INPUT_SHAPE) 
+    img_array = np.array(img, dtype=np.float32)  
+    img_array = np.expand_dims(img_array, axis=0)  
+    img_array /= 255.0  
+    return img_array
+
 
 async def predict_async(image_array):
     def predict():
-        prediction = model.predict(image_array, verbose=0)
-        predicted_idx = np.argmax(prediction[0])
-        confidence = float(prediction[0][predicted_idx])
-        predicted_class = ASL_LABELS[predicted_idx]
+        predictions = model.predict(image_array)
+        predicted_class_index = np.argmax(predictions, axis=1)
+        predicted_class = ASL_LABELS[predicted_class_index[0]] 
+        confidence = predictions[0][predicted_class_index[0]]  
         return {
             'predicted_letter': predicted_class,
-            'confidence': confidence
+            'confidence': float(confidence) 
         }
     
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(executor, predict)
 
-class PredictionCache:
-    def __init__(self, maxsize=100):
-        self.cache = OrderedDict()
-        self.maxsize = maxsize
-        self.lock = ThreadPoolExecutor(max_workers=1)
-
-    async def get_or_compute(self, image_hash, image_array):
-        current_time = time.time()
-        
-        if image_hash in self.cache:
-            prediction, timestamp = self.cache[image_hash]
-            if current_time - timestamp < 0.1:
-                return prediction
-
-        prediction = await predict_async(image_array)
-        
-        def update_cache():
-            self.cache[image_hash] = (prediction, current_time)
-            if len(self.cache) > self.maxsize:
-                self.cache.popitem(last=False)
-                
-        self.lock.submit(update_cache)
-        return prediction
-
-prediction_cache = PredictionCache()
-
 @app.route('/predict', methods=['POST'])
 async def predict():
     try:
         image_data = request.json['image'].split(',')[1]
-        image_hash = hash(image_data[:100])
         image_bytes = base64.b64decode(image_data)
+
+        # img = Image.open(io.BytesIO(image_bytes))
+        # img.show()  
+        # print(f"Image size: {img.size}, Mode: {img.mode}")
+
         image_array = preprocess_image(image_bytes)
-        
-        result = await prediction_cache.get_or_compute(image_hash, image_array)
+
+        result = await predict_async(image_array)
         return jsonify(result)
     
     except Exception as e:
@@ -97,7 +75,7 @@ def warmup():
     return jsonify({'status': 'warmed up'})
 
 if __name__ == '__main__':
-    print('running')
+    print('Running server...')
     dummy_input = np.zeros((1, 64, 64, 3))
     model.predict(dummy_input, verbose=0)
     
