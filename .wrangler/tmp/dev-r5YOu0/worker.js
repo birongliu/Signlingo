@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// .wrangler/tmp/bundle-j3Q0oY/checked-fetch.js
+// .wrangler/tmp/bundle-a6X6zD/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -55,7 +55,7 @@ var worker_default = {
 };
 async function runASLInference(base64ImageData) {
   const bufferData = Buffer.from(base64ImageData, "base64");
-  const response = await fetch("http://localhost:8000/predict", {
+  const response = await fetch("https://myflaskapp.example.com/predict", {
     method: "POST",
     headers: {
       "Content-Type": "application/octet-stream"
@@ -112,7 +112,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-j3Q0oY/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-a6X6zD/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -144,7 +144,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-j3Q0oY/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-a6X6zD/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

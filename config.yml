@@ -1,0 +1,7 @@
+tunnel: 2f852c9a-8e45-4851-baa6-f2da5a10d6fa # Replace <TUNNEL_ID> with the actual tunnel ID from the previous step
+credentials-file: /Users/goofyahhgarv/.cloudflared/2f852c9a-8e45-4851-baa6-f2da5a10d6fa.json # Path to the credentials file
+
+ingress:
+  - hostname: flask.relyvin.com # Your desired public URL
+    service: http://localhost:8000 # Local URL where Flask server is running
+  - service: http_status:404
