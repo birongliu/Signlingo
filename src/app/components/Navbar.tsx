@@ -13,7 +13,7 @@ export const NavBar = () => {
   };
 
   return (
-    <nav className="bg-feather-white fixed top-0 z-50 flex h-16 w-full items-center px-4 font-sans text-black">
+    <nav className="fixed top-0 z-50 flex h-16 w-full items-center bg-white px-4 font-sans text-black">
       <div className="flex w-full items-center justify-between">
         {/* Logo */}
         <div className="text-2xl font-bold text-black transition-all duration-300 hover:scale-110">
@@ -33,7 +33,7 @@ export const NavBar = () => {
             aria-label="Menu"
             aria-expanded={isMenuOpen}
           >
-            <RxHamburgerMenu className="h-8 w-8 text-white" />
+            <RxHamburgerMenu className="h-8 w-8 text-black" />
           </button>
         </div>
       </div>
@@ -43,7 +43,7 @@ export const NavBar = () => {
         <div className="absolute left-0 top-16 w-full space-y-4 bg-feather-green px-4 py-6 shadow-lg lg:hidden">
           <Link
             href="/learn"
-            className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+            className="block text-lg font-bold text-black transition-all duration-300 hover:scale-105"
             onClick={() => setIsMenuOpen(false)}
             aria-label="Learn"
           >
@@ -51,7 +51,7 @@ export const NavBar = () => {
           </Link>
           <Link
             href="/quiz"
-            className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+            className="block text-lg font-bold text-black transition-all duration-300 hover:scale-105"
             onClick={() => setIsMenuOpen(false)}
             aria-label="Quiz"
           >
@@ -59,7 +59,7 @@ export const NavBar = () => {
           </Link>
           <Link
             href="/progress"
-            className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+            className="block text-lg font-bold text-black transition-all duration-300 hover:scale-105"
             onClick={() => setIsMenuOpen(false)}
             aria-label="Progress"
           >
@@ -67,7 +67,7 @@ export const NavBar = () => {
           </Link>
           <Link
             href="/leaderboard"
-            className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+            className="block text-lg font-bold text-black transition-all duration-300 hover:scale-105"
             onClick={() => setIsMenuOpen(false)}
             aria-label="Leaderboard"
           >

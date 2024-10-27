@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/app/utils/supabase/client";
 import Link from "next/link";
-import { Button } from "@radix-ui/themes";
+
 import { signout } from "../lib/auth-action";
+import { Button } from "./ui/button";
 
 const NavItems = () => {
   const [user, setUser] = useState<any>(null);
@@ -22,19 +23,19 @@ const NavItems = () => {
 
   if (user !== null) {
     return (
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <Link
-          className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+          className="block text-sm font-medium text-black transition-all duration-300 hover:scale-105"
           href="/progress"
         >
-          Progress
+          <Button className="bg-feather-green">Progress</Button>
         </Link>
         <Button
           onClick={() => {
             signout();
             setUser(null);
           }}
-          className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+          className="block text-sm font-medium text-white transition-all duration-300 hover:scale-105"
         >
           Logout
         </Button>
@@ -42,18 +43,18 @@ const NavItems = () => {
     );
   } else {
     return (
-      <div className="flex gap-8">
+      <div className="flex gap-3">
         <Link
           href="/login"
-          className="rounded-full bg-green-200 p-2 px-4 text-lg font-medium text-black transition-all duration-300 hover:scale-110"
+          className="rounded-full text-sm font-medium text-black transition-all duration-300 hover:scale-110"
         >
-          Login
+          <Button className="bg-feather-green"> Login</Button>
         </Link>
         <Link
           href="/signup"
           className="text-lg font-bold text-black transition-all duration-300 hover:scale-110"
         >
-          Register
+          <Button className=""> Register</Button>
         </Link>
       </div>
     );
