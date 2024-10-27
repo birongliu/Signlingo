@@ -17,10 +17,11 @@
 /build
 
 # misc
-venv
+# model.h5
 .DS_Store
 .env
 *.pem
+venv
 
 # debug
 npm-debug.log*
