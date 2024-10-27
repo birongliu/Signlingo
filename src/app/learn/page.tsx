@@ -38,7 +38,7 @@ export default function LearningPage() {
       <Sidebar items={sidebarItems} />
 
       {/* Main Content */}
-      <main className="flex flex-1 mt-12 items-center justify-center bg-white p-10">
+      <main className="mt-12 flex flex-1 items-center justify-center bg-white p-10">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
           <LessonCard
             unit={"Unit 1"}
@@ -77,7 +77,7 @@ export default function LearningPage() {
             <div className="mt-6 flex justify-between">
               <button
                 onClick={nextSign}
-                className={`rounded-lg bg-blue-500 px-6 py-3 text-lg text-white ${
+                className={`bg-mask-green rounded-lg px-6 py-3 text-lg text-white ${
                   currentSign === signs.length - 1 &&
                   "cursor-not-allowed opacity-50"
                 }`}
@@ -89,7 +89,7 @@ export default function LearningPage() {
               {currentSign === signs.length - 1 && (
                 <button
                   onClick={closeLesson}
-                  className="rounded-lg bg-green-500 px-6 py-3 text-lg text-white"
+                  className="bg-feather-green rounded-lg px-6 py-3 text-lg text-white"
                 >
                   Finish Lesson
                 </button>

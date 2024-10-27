@@ -19,41 +19,44 @@ const NavItems = () => {
     };
     fetchUser();
   }, [user]);
-  
+
   if (user !== null) {
     return (
       <div className="flex gap-2">
         <Link
-          className="translate-colors text-lg font-bold text-gray-800 duration-300 hover:text-lime-600"
-          href="/learn"
+          className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+          href="/progress"
         >
-          DashBoard
+          Progress
         </Link>
         <Button
-        onClick={() => {
-          signout();
-          setUser(null);
-        }}
-      >
-        Log out
-      </Button>
+          onClick={() => {
+            signout();
+            setUser(null);
+          }}
+          className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"
+        >
+          Logout
+        </Button>
       </div>
     );
   } else {
-  return <div className="flex gap-2">
-    <Link
-      href="/login"
-      className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
-    >
-      Login
-    </Link>
-    <Link
-      href="/signup"
-      className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
-    >
-      Sign Up
-    </Link>
-  </div>;
+    return (
+      <div className="flex gap-2">
+        <Link
+          href="/login"
+          className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
+        >
+          Login
+        </Link>
+        <Link
+          href="/signup"
+          className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
+        >
+          Sign Up
+        </Link>
+      </div>
+    );
+  }
 };
-}
 export default NavItems;
