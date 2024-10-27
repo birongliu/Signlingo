@@ -31,7 +31,7 @@ const NavItems = () => {
         <Button
           onClick={() => {
             signout();
-            setUser(null);
+            setUser(false);
           }}
           className="block text-sm font-medium text-white transition-all duration-300 hover:scale-105"
         >
