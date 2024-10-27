@@ -263,24 +263,24 @@ const HandsContainer = () => {
       //   radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
       // });
 
-      ctx.strokeStyle = "#00FF00";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
+      // ctx.strokeStyle = "#00FF00";
+      // ctx.lineWidth = 2;
+      // ctx.strokeRect(bbox.x, bbox.y, bbox.width, bbox.height);
 
-      if (predictionRef.current) {
-        const currentPrediction = predictionRef.current;
-        console.log("Current Prediction:", currentPrediction);
-        ctx.font = "bold 48px Arial";
-        ctx.fillStyle = "#00FF00";
-        ctx.textAlign = "center";
-        ctx.fillText(
-          `${currentPrediction.predicted_letter} (${(
-            currentPrediction.confidence * 100
-          ).toFixed(0)}%)`,
-          bbox.x + bbox.width / 2,
-          bbox.y - 20,
-        );
-      }
+      // if (predictionRef.current) {
+      //   const currentPrediction = predictionRef.current;
+      //   console.log("Current Prediction:", currentPrediction);
+      //   ctx.font = "bold 48px Arial";
+      //   ctx.fillStyle = "#00FF00";
+      //   ctx.textAlign = "center";
+      //   ctx.fillText(
+      //     `${currentPrediction.predicted_letter} (${(
+      //       currentPrediction.confidence * 100
+      //     ).toFixed(0)}%)`,
+      //     bbox.x + bbox.width / 2,
+      //     bbox.y - 20,
+      //   );
+      // }
 
       cropAndQueueImage(bbox);
     }
@@ -300,18 +300,24 @@ const HandsContainer = () => {
       />
       <canvas
         ref={canvasRef}
-        style={{ position: "absolute", top: 0, left: 0 }}
-        width={1280}
-        height={720}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
+        // width={1280}
+        // height={720}
       />
       <canvas ref={cropCanvasRef} style={{ display: "none" }} />
-      {error && <div className="error">{error}</div>}
-      {prediction && (
+      {/* {error && <div className="error">{error}</div>} */}
+      {/* {prediction && (
         <div className="prediction">
           Predicted Letter: {prediction.predicted_letter} (
           {(prediction.confidence * 100).toFixed(2)}%)
         </div>
-      )}
+      )} */}
     </div>
   );
 };
