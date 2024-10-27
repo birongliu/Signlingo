@@ -8,7 +8,7 @@ import {
   lerp,
 } from "@mediapipe/drawing_utils";
 
-const PREDICTION_INTERVAL = 500;
+const PREDICTION_INTERVAL = 1000;
 const API_URL = "http://localhost:8081/predict";
 
 const HandsContainer = () => {
@@ -243,15 +243,15 @@ const HandsContainer = () => {
       const landmarks = results.multiHandLandmarks[0];
       const isRightHand = results.multiHandedness?.[0]?.label === "Right";
 
-      drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
-        color: isRightHand ? "#00FF00" : "#FF0000",
-      });
+      // drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
+      //   // color: isRightHand ? "#00FF00" : "#FF0000",
+      // });
 
-      drawLandmarks(ctx, landmarks, {
-        color: isRightHand ? "#00FF00" : "#FF0000",
-        fillColor: isRightHand ? "#FF0000" : "#00FF00",
-        radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
-      });
+      // drawLandmarks(ctx, landmarks, {
+      //   color: isRightHand ? "#00FF00" : "#FF0000",
+      //   fillColor: isRightHand ? "#FF0000" : "#00FF00",
+      //   radius: (data: Data) => lerp(data.from!.z!, -0.15, 0.1, 10, 1),
+      // });
 
       const bbox = getBoundingBox(landmarks);
 
