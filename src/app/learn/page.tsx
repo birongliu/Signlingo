@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LessonCard from "../components/LessonCard";
 import Sidebar from "../components/Sidebar";
 import Image from "next/image";
 import HandsContainer from "../inference/page";
+import type { ConfettiRef } from "@/app/components/ui/confetti";
+import Confetti from "@/app/components/ui/confetti";
 
 export default function LearningPage() {
   const [num, setNum] = useState(0);
@@ -12,6 +14,8 @@ export default function LearningPage() {
   const [currentSign, setCurrentSign] = useState(0);
   const [signed, setSigned] = useState("Nothing");
   const signs = ["/a.jpg", "/b.jpg", "/c.jpg"];
+
+  const confettiRef = useRef<ConfettiRef>(null);
 
   useEffect(() => {
     if (signed.predicted_letter == String.fromCharCode(65 + currentSign)) {
@@ -31,7 +35,14 @@ export default function LearningPage() {
     // if (currentSign < signs.length - 1) {
     //   setCurrentSign(currentSign + 1);
     // }
+
     setNum((e) => e + 1);
+    if (num % 2 == 0) {
+      setTimeout(() => {
+        setNum((e) => e + 1);
+        setCurrentSign((e) => e + 1);
+      }, 8000);
+    }
     console.log(num);
   };
 
@@ -67,6 +78,12 @@ export default function LearningPage() {
           />
         </div>
       </main>
+      {num !== 0 && num % 2 == 0 && (
+        <Confetti
+          ref={confettiRef}
+          className="pointer-events-none absolute left-0 top-0 z-10 size-full"
+        />
+      )}
 
       {/* Modal */}
       {isModalOpen && (
