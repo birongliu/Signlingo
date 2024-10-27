@@ -13,7 +13,7 @@ CORS(app)
 executor = ThreadPoolExecutor(max_workers=4)
 
 print("Loading model...")
-model = load_model('ASL.h5')
+model = load_model('model.h5')
 print("Model loaded!")
 
 INPUT_SHAPE = (64, 64)

@@ -17,7 +17,7 @@
 /build
 
 # misc
-model.h5
+# model.h5
 .DS_Store
 *.pem
 venv
