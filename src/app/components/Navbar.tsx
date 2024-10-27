@@ -13,7 +13,7 @@ export const NavBar = () => {
   };
 
   return (
-    <nav className="fixed top-0 z-50 flex h-16 w-full items-center bg-white px-4 font-sans text-black">
+    <nav className="fixed top-0 z-50 flex h-16 w-full items-center border-b-2 bg-white px-4 font-sans text-black">
       <div className="flex w-full items-center justify-between">
         {/* Logo */}
         <div className="text-2xl font-bold text-black transition-all duration-300 hover:scale-110">
@@ -40,7 +40,7 @@ export const NavBar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="absolute left-0 top-16 w-full space-y-4 bg-feather-green px-4 py-6 shadow-lg lg:hidden">
+        <div className="absolute left-0 top-16 w-full space-y-4 bg-white px-4 py-6 shadow-lg lg:hidden">
           <Link
             href="/learn"
             className="block text-lg font-bold text-black transition-all duration-300 hover:scale-105"
