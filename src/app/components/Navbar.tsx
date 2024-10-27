@@ -13,10 +13,10 @@ export const NavBar = () => {
   };
 
   return (
-    <nav className="bg-feather-green fixed top-0 z-50 flex h-16 w-full items-center px-4 font-sans">
+    <nav className="bg-feather-white fixed top-0 z-50 flex h-16 w-full items-center px-4 font-sans text-black">
       <div className="flex w-full items-center justify-between">
         {/* Logo */}
-        <div className="text-2xl font-bold text-white transition-all duration-300 hover:scale-110">
+        <div className="text-2xl font-bold text-black transition-all duration-300 hover:scale-110">
           <Link href="/">Signlingo</Link>
         </div>
 
@@ -40,7 +40,7 @@ export const NavBar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="bg-feather-green absolute left-0 top-16 w-full space-y-4 px-4 py-6 shadow-lg lg:hidden">
+        <div className="absolute left-0 top-16 w-full space-y-4 bg-feather-green px-4 py-6 shadow-lg lg:hidden">
           <Link
             href="/learn"
             className="block text-lg font-bold text-white transition-all duration-300 hover:scale-105"

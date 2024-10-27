@@ -3,7 +3,6 @@
 import Sidebar from "../components/Sidebar"; // Reuse your Sidebar component
 import React, { useEffect } from "react";
 import { getleaderboard, LeaderBoard } from "../lib/leaderboard-action";
-import { createClient } from "../utils/supabase/server";
 
 const leaderboardData = [
   { name: "Joe", lessonsCompleted: 1 },
@@ -27,7 +26,7 @@ export default function LeaderboardPage() {
     { href: "/progress", label: "Progress", icon: "📈" },
   ];
 
-  const sortedLeaderboard = leaderboard.sort((a, b) => b.score - a.score);
+  const sortedLeaderboard = leaderboard.sort((a, b) => b.lesson_completed - a.lesson_completed);
   return (
     <div className="flex min-h-screen bg-white font-sans">
       {/* Sidebar */}
@@ -51,7 +50,7 @@ export default function LeaderboardPage() {
                   {index + 1}. {user.username}
                 </span>
                 <span className="text-xl font-bold text-white">
-                  {user.score} Lessons Completed
+                  {user.lesson_completed} Lessons Completed
                 </span>
               </div>
             ))}

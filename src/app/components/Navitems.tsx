@@ -42,18 +42,18 @@ const NavItems = () => {
     );
   } else {
     return (
-      <div className="flex gap-2">
+      <div className="flex gap-8">
         <Link
           href="/login"
-          className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
+          className="rounded-full bg-green-200 p-2 px-4 text-lg font-medium text-black transition-all duration-300 hover:scale-110"
         >
           Login
         </Link>
         <Link
           href="/signup"
-          className="text-lg font-bold text-white transition-all duration-300 hover:scale-110"
+          className="text-lg font-bold text-black transition-all duration-300 hover:scale-110"
         >
-          Sign Up
+          Register
         </Link>
       </div>
     );
