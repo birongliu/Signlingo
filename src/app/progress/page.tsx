@@ -21,7 +21,7 @@ const completedQuizzes = [
 
 export default function ProgressPage() {
   return (
-    <div className="flex min-h-screen bg-white font-sans">
+    <div className="flex min-h-screen bg-gray-50 font-sans">
       {/* Sidebar */}
       <Sidebar selected={"Progress"} />
 
@@ -29,14 +29,15 @@ export default function ProgressPage() {
       <main className="mt-16 flex-1 p-6">
         {/* User Profile */}
         <section className="mb-8">
-          <div className="mx-auto w-full max-w-md rounded-lg bg-feather-green p-8 shadow-md">
-            <h1 className="mb-4 text-center text-3xl font-bold text-white">
+          <div className="mx-auto w-full max-w-md rounded-lg border border-gray-200 bg-white p-8 shadow-lg">
+            <h1 className="mb-4 text-center text-3xl font-bold text-black">
               Hello, {userData.name}
             </h1>
             <div className="text-center">
-              <p className="mb-2 text-xl font-semibold text-white">
+              <p className="mb-2 text-xl font-semibold text-black">
                 Good work! You have completed {userData.lessonsCompleted}{" "}
-                lessons or quizzes!
+                {userData.lessonsCompleted === 1 ? "lesson" : "lessons"} or
+                quizzes!
               </p>
             </div>
           </div>
@@ -44,16 +45,16 @@ export default function ProgressPage() {
 
         {/* Completed Lessons */}
         <section className="mb-6">
-          <h2 className="mb-4 text-2xl font-semibold text-eel">
+          <h2 className="mb-4 text-2xl font-semibold text-black">
             Completed Lessons
           </h2>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {completedLessons.map((lesson, index) => (
               <div
                 key={index}
-                className="rounded-lg bg-feather-green p-4 shadow-md"
+                className="rounded-lg border border-gray-300 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
               >
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-lg font-medium text-black">
                   {lesson.unit}: {lesson.title}
                 </h3>
               </div>
@@ -63,16 +64,16 @@ export default function ProgressPage() {
 
         {/* Completed Quizzes */}
         <section>
-          <h2 className="mb-4 text-2xl font-semibold text-eel">
+          <h2 className="mb-4 text-2xl font-semibold text-black">
             Completed Quizzes
           </h2>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {completedQuizzes.map((quiz, index) => (
               <div
                 key={index}
-                className="rounded-lg bg-feather-green p-4 shadow-md"
+                className="rounded-lg border border-gray-300 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
               >
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-lg font-medium text-black">
                   {quiz.quiz}: {quiz.description}
                 </h3>
               </div>
