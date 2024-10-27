@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="mx-auto flex h-full w-full max-w-[988px] flex-1 flex-col items-center justify-center gap-2 p-4 lg:flex-row">
       <div className="relative mb-8 h-[240px] w-[240px] lg:mb-0 lg:h-[424px] lg:w-[424px]">
-        <Image src="/hero.svg" alt="Hero" fill />
+        <Image src="/hero.jpg" alt="Hero" fill />
       </div>
 
       <div className="flex flex-col items-center gap-y-8">
@@ -17,7 +17,7 @@ export default function Home() {
         <div className="flex w-full max-w-[330px] flex-col items-center gap-y-3">
           <div className="flex flex-col items-center gap-2">
             <Link className="w-full" href="/signup">
-              <button className="bg-mask-green hover:bg-feather-green mt-4 w-full rounded px-4 py-2 font-medium text-white transition-all duration-300 hover:scale-105">
+              <button className="mt-4 w-full rounded bg-mask-green px-4 py-2 font-medium text-white transition-all duration-300 hover:scale-105 hover:bg-feather-green">
                 Get Started
               </button>
             </Link>
