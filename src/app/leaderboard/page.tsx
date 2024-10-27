@@ -1,16 +1,8 @@
 "use client";
 
-import Sidebar from "../components/Sidebar"; // Reuse your Sidebar component
+import Sidebar from "../components/Sidebar";
 import React, { useEffect } from "react";
 import { getleaderboard, LeaderBoard } from "../lib/leaderboard-action";
-
-const leaderboardData = [
-  { name: "Joe", lessonsCompleted: 1 },
-  { name: "Jane", lessonsCompleted: 3 },
-  { name: "Bob", lessonsCompleted: 4 },
-  { name: "123", lessonsCompleted: 9 },
-  { name: "456", lessonsCompleted: 12 },
-];
 
 export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = React.useState<LeaderBoard[]>([]);
@@ -29,17 +21,17 @@ export default function LeaderboardPage() {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-        <h1 className="text-eel mb-6 text-center text-3xl font-bold">
+        <h1 className="mb-6 text-center text-3xl font-bold text-eel">
           Leaderboard
         </h1>
 
         <section className="mb-8">
-          <h2 className="text-eel mb-4 text-2xl font-semibold">Top Learners</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-eel">Top Learners</h2>
           <div className="flex flex-col gap-3">
             {sortedLeaderboard.map((user, index) => (
               <div
                 key={index}
-                className="bg-mask-green hover:bg-feather-green flex justify-between rounded-lg p-4 shadow-md"
+                className="flex justify-between rounded-lg bg-feather-green p-4 shadow-md"
               >
                 <span className="text-xl font-bold text-white">
                   {index + 1}. {user.username}
