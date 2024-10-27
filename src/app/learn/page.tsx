@@ -7,12 +7,6 @@ import Image from "next/image";
 import HandsContainer from "../inference/page";
 
 export default function LearningPage() {
-  const sidebarItems = [
-    { href: "/quiz", label: "Quiz", icon: "💯" },
-    { href: "/progress", label: "Progress", icon: "📈" },
-    { href: "/leaderboard", label: "Leaderboard", icon: "🎯" },
-  ];
-
   const [num, setNum] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentSign, setCurrentSign] = useState(0);
@@ -48,25 +42,28 @@ export default function LearningPage() {
   return (
     <div className="flex min-h-screen font-sans">
       {/* Sidebar */}
-      <Sidebar items={sidebarItems} />
+      <Sidebar selected="Learn" />
 
       {/* Main Content */}
       <main className="mt-12 flex flex-1 items-center justify-center bg-white p-10">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
           <LessonCard
             unit={"Unit 1"}
-            description={"Learn the basics of sign language."}
+            description={"Learn the basics of sign language. I"}
             onStart={startLesson}
+            type={"Lesson"}
           />
           <LessonCard
             unit={"Unit 2"}
-            description={"Learn intermediate sign language."}
+            description={"Learn the basics of sign language. II"}
             onStart={startLesson}
+            type={"Lesson"}
           />
           <LessonCard
             unit={"Unit 3"}
-            description={"Learn advanced sign language."}
+            description={"Learn the basics of sign language. III"}
             onStart={startLesson}
+            type={"Lesson"}
           />
         </div>
       </main>
@@ -81,7 +78,7 @@ export default function LearningPage() {
                   onClick={() => {
                     setNum((e) => e - 1);
                   }}
-                  className="rounded-3xl bg-mask-green px-2 py-1 text-lg"
+                  className="bg-mask-green rounded-3xl px-2 py-1 text-lg"
                 >
                   Hint
                 </button>
@@ -103,7 +100,7 @@ export default function LearningPage() {
                       setCurrentSign(currentSign + 1);
                     }
                   }}
-                  className="rounded-3xl bg-mask-green px-2 py-1 text-lg"
+                  className="bg-mask-green rounded-3xl px-2 py-1 text-lg"
                 >
                   {signs.length + 1 + (num % 2) == num ? "Finish" : "Skip"}
                 </button>
@@ -125,7 +122,7 @@ export default function LearningPage() {
                     onClick={
                       currentSign === signs.length ? closeLesson : nextSign
                     }
-                    className={`mr-2 w-full items-center rounded-lg bg-mask-green px-6 py-3 text-lg text-white`}
+                    className={`bg-mask-green mr-2 w-full items-center rounded-lg px-6 py-3 text-lg text-white`}
                     // disabled={currentSign === signs.length - 1}
                   >
                     {currentSign === signs.length ? "Close" : "Next"}

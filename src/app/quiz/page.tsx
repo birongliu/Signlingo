@@ -6,12 +6,6 @@ import LessonCard from "../components/LessonCard";
 import Image from "next/image";
 
 export default function QuizPage() {
-  const sidebarItems = [
-    { href: "/learn", label: "Learn", icon: "🤓" },
-    { href: "/progress", label: "Progress", icon: "📈" },
-    { href: "/leaderboard", label: "Leaderboard", icon: "🎯" },
-  ];
-
   const [isQuizModalOpen, setQuizModalOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -86,25 +80,28 @@ export default function QuizPage() {
   return (
     <div className="flex min-h-screen font-sans">
       {/* Sidebar */}
-      <Sidebar items={sidebarItems} />
+      <Sidebar selected={"Quiz"} />
 
       {/* Main Content */}
-      <main className="flex mt-10 flex-1 items-center justify-center bg-white p-10">
+      <main className="mt-10 flex flex-1 items-center justify-center bg-white p-10">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
           <LessonCard
             unit={"Quiz 1"}
-            description={"Get quizzed on the basics of sign language."}
+            description={"Get quizzed on the basics of sign language. I"}
             onStart={startQuiz}
+            type={"Quiz"}
           />
           <LessonCard
             unit={"Quiz 2"}
-            description={"Quiz about intermediate sign language."}
+            description={"Get quizzed on the basics of sign language. II"}
             onStart={startQuiz}
+            type={"Quiz"}
           />
           <LessonCard
             unit={"Quiz 3"}
-            description={"Quiz about advanced sign language."}
+            description={"Get quizzed on the basics of sign language. III"}
             onStart={startQuiz}
+            type={"Quiz"}
           />
         </div>
       </main>

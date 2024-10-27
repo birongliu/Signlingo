@@ -20,16 +20,10 @@ const completedQuizzes = [
 ];
 
 export default function ProgressPage() {
-  const sidebarItems = [
-    { href: "/learn", label: "Learn", icon: "🤓" },
-    { href: "/quiz", label: "Quiz", icon: "💯" },
-    { href: "/leaderboard", label: "Leaderboard", icon: "🎯" },
-  ];
-
   return (
     <div className="flex min-h-screen bg-white font-sans">
       {/* Sidebar */}
-      <Sidebar items={sidebarItems} />
+      <Sidebar selected={"Progress"} />
 
       {/* Main Content */}
       <main className="mt-16 flex-1 p-6">

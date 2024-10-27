@@ -19,18 +19,13 @@ export default function LeaderboardPage() {
     getleaderboard().then(setLeaderboard);
   }, []);
 
-
-  const sidebarItems = [
-    { href: "/learn", label: "Learn", icon: "🤓" },
-    { href: "/quiz", label: "Quiz", icon: "💯" },
-    { href: "/progress", label: "Progress", icon: "📈" },
-  ];
-
-  const sortedLeaderboard = leaderboard.sort((a, b) => b.lesson_completed - a.lesson_completed);
+  const sortedLeaderboard = leaderboard.sort(
+    (a, b) => b.lesson_completed - a.lesson_completed,
+  );
   return (
     <div className="flex min-h-screen bg-white font-sans">
       {/* Sidebar */}
-      <Sidebar items={sidebarItems} />
+      <Sidebar selected={"Leaderboard"} />
 
       {/* Main Content */}
       <main className="flex-1 p-6">
